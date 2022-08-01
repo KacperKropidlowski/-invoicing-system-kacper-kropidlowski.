@@ -1,1 +1,1 @@
-# -invoicing-system-kacper-kropidlowski.
+# invoicing-system-kacper-kropidlowski
