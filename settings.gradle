@@ -7,5 +7,5 @@
  * in the user manual at https://docs.gradle.org/7.5/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'invoicing-system-kacper-kropidlowski-master'
+rootProject.name = 'invoicing-system-kacper-kropidlowski'
 include('app')
