@@ -14,22 +14,38 @@ import pl.futurecollars.invoicing.service.InvoiceService;
 public class App {
 
   public static void main(String[] args) {
-    Database db = new InMemoryDatabase();
-    InvoiceService service = new InvoiceService(db);
 
-    Company buyer = new Company("5213861303", "ul. Bukowińska 24d/7 02-703 Warszawa, Polska", "iCode Trust Sp. z o.o");
-    Company seller = new Company("552-168-66-00", "32-005 Niepolomice, Nagietkowa 19", "Piotr Kolacz Development");
+    Database database = new InMemoryDatabase();
 
-    List<InvoiceEntry> products = List.of(new InvoiceEntry("Programming course", BigDecimal.valueOf(10000), BigDecimal.valueOf(2300), Vat.VAT_23));
+    InvoiceService invoiceService = new InvoiceService(database);
 
-    Invoice invoice = new Invoice(LocalDate.now(), buyer, seller, products);
+    Company seller = new Company("Relax Kebab", "5212205778", "aleja Jana Pawła II 40A, 05-250 Radzymin");
+    Company buyer = new Company("AGENCJA MIENIA WOJSKOWEGO", "5261038122", "ul. Nowowiejska 26A, 00-911 Warszawa");
 
-    int id = service.save(invoice);
+    InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", new BigDecimal(700), new BigDecimal(161), Vat.VAT_23);
 
-    service.getById(id).ifPresent(System.out::println);
+    Invoice invoice = Invoice.builder()
+        .date(LocalDate.now())
+        .seller(seller)
+        .buyer(buyer)
+        .invoiceEntries(List.of(firstEntry))
+        .build();
 
-    System.out.println(service.getAll());
+    Invoice updatedInvoice = Invoice.builder()
+        .date(LocalDate.now())
+        .seller(buyer)
+        .buyer(seller)
+        .invoiceEntries(List.of(firstEntry))
+        .build();
 
-    service.delete(id);
+    long invoiceId = invoiceService.saveInvoice(invoice);
+
+    System.out.println(invoiceService.getInvoice(invoiceId));
+
+    invoiceService.updateInvoice(invoiceId, updatedInvoice);
+
+    System.out.println(invoiceService.getInvoice(invoiceId));
+
+    System.out.println(invoiceService.getInvoice(88));
   }
 }
