@@ -7,18 +7,17 @@ import pl.futurecollars.invoicing.model.Invoice;
 
 public class InMemoryDatabase implements Database {
 
-  private static long currentId = 1;
+  private long currentId = 1;
 
-  private Map<Long, Invoice> invoices = new HashMap<>();
+  private final Map<Long, Invoice> invoices = new HashMap<>();
 
   @Override
   public long save(Invoice invoice) {
-    long newId = currentId;
-    invoice.setId(newId);
-    invoices.put(newId, invoice);
+    invoice.setId(currentId);
 
-    currentId++;
-    return newId;
+    invoices.put(currentId, invoice);
+
+    return currentId++;
   }
 
   @Override
@@ -27,15 +26,15 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public void update(long id, Invoice updatedInvoice) {
+  public void update(long id, Invoice invoice) {
     Invoice actualInvoice = getById(id);
 
     if (actualInvoice == null) {
       throw new RuntimeException("Invoice with id " + id + " does not exist.");
     }
 
-    updatedInvoice.setId(id);
-    invoices.put(id, updatedInvoice);
+    invoice.setId(id);
+    invoices.put(id, invoice);
   }
 
   @Override

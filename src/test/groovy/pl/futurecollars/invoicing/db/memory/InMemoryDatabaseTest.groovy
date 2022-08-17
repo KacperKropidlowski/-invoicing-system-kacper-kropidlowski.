@@ -1,39 +1,19 @@
 package pl.futurecollars.invoicing.db.memory
 
 import pl.futurecollars.invoicing.db.Database
-import pl.futurecollars.invoicing.model.Company
-import pl.futurecollars.invoicing.model.Invoice
-import pl.futurecollars.invoicing.model.InvoiceEntry
-import pl.futurecollars.invoicing.model.Vat
 import spock.lang.Specification
-import spock.lang.Stepwise
 
-import java.time.LocalDate
+import static pl.futurecollars.invoicing.DataForTesting.invoice
+import static pl.futurecollars.invoicing.DataForTesting.updatedInvoice
 
-@Stepwise
+
 class InMemoryDatabaseTest extends Specification {
 
+    Database database
 
-    Database database = new InMemoryDatabase()
-
-    Company seller = new Company("Relax Kebab", "5212205778", "aleja Jana Pawła II 40A, 05-250 Radzymin")
-    Company buyer = new Company("AGENCJA MIENIA WOJSKOWEGO", "5261038122", "ul. Nowowiejska 26A, 00-911 Warszawa")
-
-    InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", new BigDecimal(700), new BigDecimal(161), Vat.VAT_23)
-
-    Invoice invoice = Invoice.builder()
-            .date(LocalDate.now())
-            .seller(seller)
-            .buyer(buyer)
-            .invoiceEntries(List.of(firstEntry))
-            .build()
-
-    Invoice updatedInvoice = Invoice.builder()
-            .date(LocalDate.now())
-            .seller(buyer)
-            .buyer(seller)
-            .invoiceEntries(List.of(firstEntry))
-            .build()
+    def setup() {
+        database = new InMemoryDatabase()
+    }
 
     def "should save an invoice and return id"() {
         when:
@@ -47,16 +27,16 @@ class InMemoryDatabaseTest extends Specification {
         database.save(invoice)
 
         then:
-        database.getById(2) == invoice
+        database.getById(1) == invoice
     }
 
     def "should update invoice"() {
         when:
         database.save(invoice)
-        database.update(3,updatedInvoice)
+        database.update(1,updatedInvoice)
 
         then:
-        database.getById(3) == updatedInvoice
+        database.getById(1) == updatedInvoice
     }
 
     def "should expect exception updating invoice that does not exist"() {
@@ -70,7 +50,7 @@ class InMemoryDatabaseTest extends Specification {
     def "should delete invoice"() {
         when:
         database.save(invoice)
-        database.delete(1)
+        database.delete(1L)
         then:
         database.getById(1) == null
     }
