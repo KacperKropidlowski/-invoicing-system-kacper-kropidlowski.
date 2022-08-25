@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Iterator;
 
-public class IdService {
+class IdService {
 
   private final Path idFilePath;
   private final FilesService filesService;

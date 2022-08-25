@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
-public class FilesService {
+class FilesService {
 
   void appendLineToFile(Path path, String line) throws IOException {
     Files.write(path, (line + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);

@@ -5,3 +5,8 @@
 build
 
 .idea
+
+.db
+
+./src/test/groovy/pl/futurecollars/invoicing/db/file/testingId.txt
+./src/test/groovy/pl/futurecollars/invoicing/db/file/testingInvoices.json
