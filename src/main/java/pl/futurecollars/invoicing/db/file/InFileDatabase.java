@@ -82,12 +82,11 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public List<Long> getAllIds() {
+  public List<Invoice> getAllInvoices() {
     try {
       return filesService.readAllLines(databasePath)
           .stream()
           .map(line -> jsonService.toObject(line, Invoice.class))
-          .map(Invoice::getId)
           .collect(Collectors.toList());
     } catch (IOException exception) {
       throw new RuntimeException("Failed to get all ids", exception);

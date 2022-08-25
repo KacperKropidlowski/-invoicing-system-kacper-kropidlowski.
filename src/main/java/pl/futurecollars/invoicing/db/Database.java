@@ -14,5 +14,5 @@ public interface Database {
 
   void delete(long id);
 
-  List<Long> getAllIds();
+  List<Invoice> getAllInvoices();
 }

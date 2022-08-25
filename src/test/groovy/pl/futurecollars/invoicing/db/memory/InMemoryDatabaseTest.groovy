@@ -16,11 +16,8 @@ class InMemoryDatabaseTest extends Specification {
     }
 
     def "should save an invoice and return id"() {
-        when:
-        long result = database.save(invoice)
-        
-        then:
-        result == 1
+        expect:
+        1L == database.save(invoice)
     }
 
     def "should get invoice by id"() {
@@ -59,12 +56,13 @@ class InMemoryDatabaseTest extends Specification {
         database.getById(1) == Optional.empty()
     }
 
-    def "should get all ids"() {
+    def "should get all invoices"() {
         when:
         database.save(invoice)
-        database.save(invoice)
+        database.save(updatedInvoice)
 
         then:
-        database.getAllIds() == [1L,2L]
+        database.getAllInvoices().contains(invoice)
+        database.getAllInvoices().contains(updatedInvoice)
     }
 }

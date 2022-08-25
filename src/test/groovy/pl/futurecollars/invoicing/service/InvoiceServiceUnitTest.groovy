@@ -18,25 +18,11 @@ class InvoiceServiceUnitTest extends Specification {
     }
 
     def "calling saveInvoice() should delegate to database save() method"() {
-        given:
-        invoice
-
         when:
         invoiceService.saveInvoice(invoice)
 
         then:
         1 * database.save(invoice)
-    }
-
-    def "calling updateInvoice() should delegate to database update() method"() {
-        given:
-        updatedInvoice
-
-        when:
-        invoiceService.updateInvoice(1, updatedInvoice)
-
-        then:
-        1 * database.update(1, updatedInvoice)
     }
 
     def "calling getInvoice() should delegate to database getById() method"() {
@@ -50,22 +36,56 @@ class InvoiceServiceUnitTest extends Specification {
         1 * database.getById(invoiceId)
     }
 
-    def "calling deleteInvoice() should delegate to database delete() method"() {
+    def "calling updateInvoice() should return true and delegate to database update() method if invoice to update exists in database"() {
         given:
-        def invoiceId = 1L
+        database.getById(1) >> Optional.of(invoice)
 
         when:
-        invoiceService.deleteInvoice(invoiceId)
+        invoiceService.updateInvoice(1, updatedInvoice)
 
         then:
-        1 * database.delete(invoiceId)
+        1 * database.update(1, updatedInvoice)
+        true
     }
 
-    def "calling getAllIds() should delegate to database getAllIds() method"() {
+    def "calling updateInvoice() should return false if invoice to update does not exists in database"() {
+        given:
+        database.getById(1) >> Optional.empty()
+
         when:
-        invoiceService.getAllIds()
+        def result = invoiceService.updateInvoice(1, updatedInvoice)
 
         then:
-        1 * database.getAllIds()
+        !result
+    }
+
+    def "calling deleteInvoice() should delegate to database delete() method if invoice exists in database"() {
+        given:
+        database.getById(1) >> Optional.of(invoice)
+
+        when:
+        invoiceService.deleteInvoice(1)
+
+        then:
+        1 * database.delete(1)
+    }
+
+    def "calling deleteInvoice() should return false if invoice to update does not exists in database"() {
+        given:
+        database.getById(1) >> Optional.empty()
+
+        when:
+        def result = invoiceService.deleteInvoice(1)
+
+        then:
+        !result
+    }
+
+    def "calling getAllInvoices() should delegate to database getAllInvoices() method"() {
+        when:
+        invoiceService.getAllInvoices()
+
+        then:
+        1 * database.getAllInvoices()
     }
 }

@@ -46,7 +46,7 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public List<Long> getAllIds() {
-    return new ArrayList<>(invoices.keySet());
+  public List<Invoice> getAllInvoices() {
+    return new ArrayList<>(invoices.values());
   }
 }

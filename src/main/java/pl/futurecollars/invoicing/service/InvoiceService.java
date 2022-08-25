@@ -17,20 +17,31 @@ public class InvoiceService {
     return database.save(invoice);
   }
 
-  public void updateInvoice(long id, Invoice invoice) {
-    database.update(id, invoice);
+  public boolean updateInvoice(long id, Invoice invoice) {
+    if (database.getById(id).isPresent()) {
+      database.update(id, invoice);
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   public Optional<Invoice> getInvoice(long id) {
     return database.getById(id);
   }
 
-  public void deleteInvoice(long id) {
-    database.delete(id);
+  public boolean deleteInvoice(long id) {
+    if (database.getById(id).isPresent()) {
+      database.delete(id);
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  public List<Long> getAllIds() {
-    return database.getAllIds();
+  public List<Invoice> getAllInvoices() {
+    return database.getAllInvoices();
   }
 
 }

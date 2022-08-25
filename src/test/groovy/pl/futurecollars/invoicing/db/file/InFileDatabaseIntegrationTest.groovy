@@ -9,7 +9,7 @@ import java.nio.file.Files
 import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 
-class InFileDatabaseTest extends Specification {
+class InFileDatabaseIntegrationTest extends Specification {
 
     Path idServiceTestingPath = Path.of("src/test/resources/db/file/testingId.txt")
     Path inFileDatabaseTestingPath = Path.of("src/test/resources/db/file/testingInvoices.json")
@@ -122,15 +122,14 @@ class InFileDatabaseTest extends Specification {
     def "should get all ids"() {
         when:
         inFileDatabase.save(invoice)
-        inFileDatabase.save(invoice)
-
+        inFileDatabase.save(updatedInvoice)
         then:
-        inFileDatabase.getAllIds() == [1L, 2L]
+        (inFileDatabase.getAllInvoices()).toString().contains("[Invoice(id=1, date=2022-08-31, seller=Company(name=Relax Kebab, taxIdentificationNumber=5212205778, address=aleja Jana Pawla II 40A, 05-250 Radzymin), buyer=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa), invoiceEntries=[InvoiceEntry(description=Stumetrowy kebab, price=700, vatValue=161, vatRate=Vat.VAT_23)]), Invoice(id=2, date=2022-08-31, seller=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa), buyer=Company(name=Relax Kebab, taxIdentificationNumber=5212205778, address=aleja Jana Pawla II 40A, 05-250 Radzymin), invoiceEntries=[InvoiceEntry(description=Stumetrowy kebab, price=700, vatValue=161, vatRate=Vat.VAT_23)])]")
     }
 
     def "should throw an exception with message 'Failed to get all ids'"() {
         when:
-        wrongPathDatabase.getAllIds()
+        wrongPathDatabase.getAllInvoices()
 
         then:
         def exception = thrown(RuntimeException)

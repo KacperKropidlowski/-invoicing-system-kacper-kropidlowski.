@@ -60,12 +60,13 @@ class InvoiceServiceIntegrationTest extends Specification {
         invoiceService.getInvoice(1) == Optional.empty()
     }
 
-    def "it's possible to get all saved ids"() {
+    def "it's possible to get all saved invoices"() {
         given:
         invoiceService.saveInvoice(invoice)
-        invoiceService.saveInvoice(invoice)
+        invoiceService.saveInvoice(updatedInvoice)
 
         expect:
-        invoiceService.getAllIds() == [1L,2L]
+        invoiceService.getAllInvoices().contains(invoice)
+        invoiceService.getAllInvoices().contains(updatedInvoice)
     }
 }
