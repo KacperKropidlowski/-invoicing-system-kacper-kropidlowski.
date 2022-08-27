@@ -19,12 +19,10 @@ public class Invoice {
   private Company buyer;
   private List<InvoiceEntry> invoiceEntries;
 
-  // check if it's possible to generate such constructor via @AllArgs...
   public Invoice(LocalDate date, Company seller, Company buyer, List<InvoiceEntry> invoiceEntries) {
     this.date = date;
     this.seller = seller;
     this.buyer = buyer;
     this.invoiceEntries = invoiceEntries;
   }
-
 }
