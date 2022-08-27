@@ -13,17 +13,7 @@ class DataForTesting {
 
     static InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", new BigDecimal(700), new BigDecimal(161), Vat.VAT_23)
 
-    static Invoice invoice = Invoice.builder()
-            .date(LocalDate.now())
-            .seller(seller)
-            .buyer(buyer)
-            .invoiceEntries(List.of(firstEntry))
-            .build()
+    static Invoice invoice = new Invoice(LocalDate.now(),seller,buyer,List.of(firstEntry))
 
-    static Invoice updatedInvoice = Invoice.builder()
-            .date(LocalDate.now())
-            .seller(buyer)
-            .buyer(seller)
-            .invoiceEntries(List.of(firstEntry))
-            .build()
+    static Invoice updatedInvoice = new Invoice(LocalDate.now(),buyer,seller,List.of(firstEntry))
 }

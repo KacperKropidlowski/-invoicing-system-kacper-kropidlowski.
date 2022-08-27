@@ -2,6 +2,7 @@ package pl.futurecollars.invoicing.db.memory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.model.Invoice;
 
@@ -21,15 +22,15 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public Invoice getById(long id) {
-    return invoices.get(id);
+  public Optional<Invoice> getById(long id) {
+    return Optional.ofNullable(invoices.get(id));
   }
 
   @Override
   public void update(long id, Invoice invoice) {
-    Invoice actualInvoice = getById(id);
+    Optional<Invoice> actualInvoice = getById(id);
 
-    if (actualInvoice == null) {
+    if (actualInvoice.isEmpty()) {
       throw new RuntimeException("Invoice with id " + id + " does not exist.");
     }
 

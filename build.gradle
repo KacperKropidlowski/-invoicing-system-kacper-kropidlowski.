@@ -5,11 +5,9 @@
 * For more details take a look at the 'Building Java & JVM projects' chapter in the Gradle
 * User Manual available at https://docs.gradle.org/7.5/userguide/building_java_projects.html
 */
-
 plugins {
     // Apply the groovy plugin to also add support for Groovy (needed for Spock)
     id 'groovy'
-
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
 
@@ -41,18 +39,19 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
+
 }
 
 application {
     // Define the main class for the application.
     mainClass = 'pl.futurecollars.invoicing.App'
 }
-
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
-
 checkstyle {
     showViolations = true
     ignoreFailures = false
@@ -83,4 +82,11 @@ test {
 }
 jacocoTestReport {
     dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "pl/futurecollars/invoicing/config/*"
+            ])
+        }))
+    }
 }

@@ -18,6 +18,7 @@ class InMemoryDatabaseTest extends Specification {
     def "should save an invoice and return id"() {
         when:
         long result = database.save(invoice)
+        
         then:
         result == 1
     }
@@ -25,23 +26,25 @@ class InMemoryDatabaseTest extends Specification {
     def "should get invoice by id"() {
         when:
         database.save(invoice)
-
+        def result = database.getById(1)
+        
         then:
-        database.getById(1) == invoice
+        result.isPresent()
+        result == Optional.of(invoice)
     }
 
     def "should update invoice"() {
         when:
         database.save(invoice)
-        database.update(1,updatedInvoice)
+        database.update(1, updatedInvoice)
 
         then:
-        database.getById(1) == updatedInvoice
+        database.getById(1) == Optional.of(updatedInvoice)
     }
 
     def "should expect exception updating invoice that does not exist"() {
         when:
-        database.update(50,updatedInvoice)
+        database.update(50, updatedInvoice)
 
         then:
         thrown(RuntimeException)
@@ -51,7 +54,8 @@ class InMemoryDatabaseTest extends Specification {
         when:
         database.save(invoice)
         database.delete(1L)
+        
         then:
-        database.getById(1) == null
+        database.getById(1) == Optional.empty()
     }
 }

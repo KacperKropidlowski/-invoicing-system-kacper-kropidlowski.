@@ -19,26 +19,33 @@ class InvoiceServiceIntegrationTest extends Specification {
     def "should save invoice returning id, invoice should have id set to correct value, get by id returns saved invoice"() {
         when:
         long invoiceId = invoiceService.saveInvoice(invoice)
+        
         then:
         invoiceId == 1
-        invoiceService.getInvoice(1) == invoice
+        invoiceService.getInvoice(1) == Optional.of(invoice)
     }
 
     def "it's possible to update the invoice"() {
         given:
         invoiceService.saveInvoice(invoice)
+        
         when:
         invoiceService.updateInvoice(1,updatedInvoice)
+        def result = invoiceService.getInvoice(1)
+        
         then:
-        invoiceService.getInvoice(1) == updatedInvoice
+        result.isPresent()
+        result.get() == updatedInvoice
     }
 
     def "it's possible to delete the invoice"(){
         given:
         invoiceService.saveInvoice(invoice)
+        
         when:
         invoiceService.deleteInvoice(1)
+        
         then:
-        invoiceService.getInvoice(1) == null
+        invoiceService.getInvoice(1) == Optional.empty()
     }
 }
