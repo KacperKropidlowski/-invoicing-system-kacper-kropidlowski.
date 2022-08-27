@@ -10,7 +10,7 @@ class IdService {
   private final FilesService filesService;
   private long nextId = 1;
 
-  public IdService(Path idFilePath, FilesService filesService) {
+  IdService(Path idFilePath, FilesService filesService) {
     this.idFilePath = idFilePath;
     this.filesService = filesService;
 

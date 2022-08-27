@@ -10,7 +10,7 @@ import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.model.Invoice;
 
 @AllArgsConstructor
-class InFileDatabase implements Database {
+public class InFileDatabase implements Database {
 
   private final Path databasePath;
   private final IdService idService;
