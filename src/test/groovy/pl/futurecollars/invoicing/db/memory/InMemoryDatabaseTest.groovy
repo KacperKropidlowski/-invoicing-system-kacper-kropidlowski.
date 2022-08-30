@@ -58,4 +58,13 @@ class InMemoryDatabaseTest extends Specification {
         then:
         database.getById(1) == Optional.empty()
     }
+
+    def "should get all ids"() {
+        when:
+        database.save(invoice)
+        database.save(invoice)
+
+        then:
+        database.getAllIds() == [1L,2L]
+    }
 }

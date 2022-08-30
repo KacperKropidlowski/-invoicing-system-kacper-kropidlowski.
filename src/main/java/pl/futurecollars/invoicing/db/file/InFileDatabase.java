@@ -2,6 +2,7 @@ package pl.futurecollars.invoicing.db.file;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,6 +80,23 @@ public class InFileDatabase implements Database {
     } catch (IOException exception) {
       throw new RuntimeException("Failed to delete invoice with id: " + id, exception);
     }
+  }
+
+  @Override
+  public List<Long> getAllIds() {
+    List<Invoice> allInvoices = new ArrayList<>();
+    List<Long> allIds = new ArrayList<>();
+    try {
+      filesService.readAllLines(databasePath)
+          .forEach(line -> allInvoices.add(jsonService.toObject(line, Invoice.class)));
+
+      allInvoices
+          .forEach(invoice -> allIds.add(invoice.getId()));
+
+    } catch (IOException exception) {
+      throw new RuntimeException("Failed to get all ids", exception);
+    }
+    return allIds;
   }
 
   private boolean containsId(String line, long id) {

@@ -11,8 +11,8 @@ import java.nio.file.Path
 
 class InFileDatabaseTest extends Specification {
 
-    Path idServiceTestingPath = Path.of("src/test/groovy/pl/futurecollars/invoicing/db/file/testingId.txt")
-    Path inFileDatabaseTestingPath = Path.of("src/test/groovy/pl/futurecollars/invoicing/db/file/testingInvoices.json")
+    Path idServiceTestingPath = Path.of("src/test/resources/db/file/testingId.txt")
+    Path inFileDatabaseTestingPath = Path.of("src/test/resources/db/file/testingInvoices.json")
     FilesService filesService = new FilesService()
     JsonService jsonService = new JsonService()
     IdService idService = new IdService(idServiceTestingPath, filesService)
@@ -117,5 +117,23 @@ class InFileDatabaseTest extends Specification {
         then:
         def exception = thrown(RuntimeException)
         exception.message == "Failed to delete invoice with id: 1"
+    }
+
+    def "should get all ids"() {
+        when:
+        inFileDatabase.save(invoice)
+        inFileDatabase.save(invoice)
+
+        then:
+        inFileDatabase.getAllIds() == [1L, 2L]
+    }
+
+    def "should throw an exception with message 'Failed to get all ids'"() {
+        when:
+        wrongPathDatabase.getAllIds()
+
+        then:
+        def exception = thrown(RuntimeException)
+        exception.message == "Failed to get all ids"
     }
 }

@@ -1,13 +1,12 @@
 package pl.futurecollars.invoicing.db.file;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
-class FilesService {
+public class FilesService {
 
   void appendLineToFile(Path path, String line) throws IOException {
     Files.write(path, (line + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
@@ -22,6 +21,6 @@ class FilesService {
   }
 
   List<String> readAllLines(Path path) throws IOException {
-    return Files.readAllLines(path, StandardCharsets.ISO_8859_1);
+    return Files.readAllLines(path);
   }
 }
