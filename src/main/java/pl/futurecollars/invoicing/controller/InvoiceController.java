@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.service.InvoiceService;
@@ -17,11 +16,10 @@ import pl.futurecollars.invoicing.service.InvoiceService;
 @RestController
 public class InvoiceController {
 
-  private final Database database = new InMemoryDatabase();
   private final InvoiceService invoiceService;
 
-  public InvoiceController(InvoiceService invoiceService) {
-    this.invoiceService = invoiceService;
+  public InvoiceController() {
+    this.invoiceService = new InvoiceService(new InMemoryDatabase());
   }
 
   @GetMapping("/invoices/{id}")
@@ -35,20 +33,22 @@ public class InvoiceController {
   }
 
   @DeleteMapping("/invoices/{id}")
-  public void deleteInvoice(@PathVariable long id) {
+  public ResponseEntity<?> deleteInvoice(@PathVariable long id) {
     if (this.invoiceService.getInvoice(id).isPresent()) {
       this.invoiceService.deleteInvoice(id);
+      return ResponseEntity.ok().build();
     } else {
-      ResponseEntity.notFound().build();
+      return ResponseEntity.notFound().build();
     }
   }
 
   @PutMapping("/invoices/{id}")
-  public void updateInvoice(@RequestBody Invoice invoice, @PathVariable long id) {
+  public ResponseEntity updateInvoice(@RequestBody Invoice invoice, @PathVariable long id) {
     if (this.invoiceService.getInvoice(id).isPresent()) {
       this.invoiceService.updateInvoice(id, invoice);
+      return ResponseEntity.accepted().build();
     } else {
-      ResponseEntity.notFound().build();
+      return ResponseEntity.notFound().build();
     }
   }
 
