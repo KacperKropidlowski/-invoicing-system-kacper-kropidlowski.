@@ -34,6 +34,7 @@ public class InvoiceController {
 
   @DeleteMapping("/invoices/{id}")
   public ResponseEntity<?> deleteInvoice(@PathVariable long id) {
+
     if (this.invoiceService.getInvoice(id).isPresent()) {
       this.invoiceService.deleteInvoice(id);
       return ResponseEntity.ok().build();
