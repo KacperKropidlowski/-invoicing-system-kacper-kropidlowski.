@@ -6,6 +6,8 @@ import pl.futurecollars.invoicing.model.Invoice
 import pl.futurecollars.invoicing.model.InvoiceEntry
 import pl.futurecollars.invoicing.model.Vat
 
+import java.time.Month
+
 class DataForTesting {
 
     static Company seller = new Company("Relax Kebab", "5212205778", "aleja Jana Pawla II 40A, 05-250 Radzymin")
@@ -13,8 +15,8 @@ class DataForTesting {
 
     static InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", new BigDecimal(700), new BigDecimal(161), Vat.VAT_23)
 
-    static Invoice invoice = new Invoice(LocalDate.now(),seller,buyer,List.of(firstEntry))
+    static Invoice invoice = new Invoice(LocalDate.of(2022, Month.JUNE,29),seller,buyer,List.of(firstEntry))
 
-    static Invoice updatedInvoice = new Invoice(LocalDate.now(),buyer,seller,List.of(firstEntry))
+    static Invoice updatedInvoice = new Invoice(LocalDate.of(2022, Month.JUNE,29),buyer,seller,List.of(firstEntry))
 
 }
