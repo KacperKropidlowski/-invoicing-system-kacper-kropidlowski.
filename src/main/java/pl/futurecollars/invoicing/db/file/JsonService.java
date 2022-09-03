@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.nio.charset.StandardCharsets;
+import org.springframework.stereotype.Component;
 
-public class JsonService {
+@Component
+class JsonService {
 
   private final ObjectMapper objectMapper;
 

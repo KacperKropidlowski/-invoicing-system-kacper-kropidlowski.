@@ -76,7 +76,7 @@ jacocoTestCoverageVerification {
     afterEvaluate {
             getClassDirectories().setFrom(classDirectories.files.collect {
                 fileTree(dir: it, exclude: [
-                        "pl/futurecollars/invoicing/config/*",
+                        "pl/futurecollars/invoicing/db/file/Config*",
                         "pl/futurecollars/invoicing/controller/*",
                         "pl/futurecollars/invoicing/App*"
                 ])
@@ -92,7 +92,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "pl/futurecollars/invoicing/config/*",
+                    "pl/futurecollars/invoicing/db/file/Config*",
                     "pl/futurecollars/invoicing/controller/*",
                     "pl/futurecollars/invoicing/App*"
             ])
