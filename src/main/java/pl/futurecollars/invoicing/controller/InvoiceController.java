@@ -35,8 +35,7 @@ public class InvoiceController {
 
   @DeleteMapping("/invoices/{id}")
   public ResponseEntity<?> deleteInvoice(@PathVariable long id) {
-    if (this.invoiceService.deleteInvoice(id) == true) {
-      this.invoiceService.deleteInvoice(id);
+    if (this.invoiceService.deleteInvoice(id)) {
       return ResponseEntity.ok().build();
     } else {
       return ResponseEntity.notFound().build();
@@ -45,8 +44,7 @@ public class InvoiceController {
 
   @PutMapping("/invoices/{id}")
   public ResponseEntity<?> updateInvoice(@RequestBody Invoice invoice, @PathVariable long id) {
-    if (this.invoiceService.updateInvoice(id, invoice) == true) {
-      this.invoiceService.updateInvoice(id, invoice);
+    if (this.invoiceService.updateInvoice(id, invoice)) {
       return ResponseEntity.ok().build();
     } else {
       return ResponseEntity.notFound().build();
