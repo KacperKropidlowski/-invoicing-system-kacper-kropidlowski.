@@ -1,6 +1,8 @@
 package pl.futurecollars.invoicing.db.memory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import pl.futurecollars.invoicing.db.Database;
@@ -41,5 +43,10 @@ public class InMemoryDatabase implements Database {
   @Override
   public void delete(long id) {
     invoices.remove(id);
+  }
+
+  @Override
+  public List<Invoice> getAllInvoices() {
+    return new ArrayList<>(invoices.values());
   }
 }

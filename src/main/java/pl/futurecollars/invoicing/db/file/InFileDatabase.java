@@ -81,6 +81,18 @@ public class InFileDatabase implements Database {
     }
   }
 
+  @Override
+  public List<Invoice> getAllInvoices() {
+    try {
+      return filesService.readAllLines(databasePath)
+          .stream()
+          .map(line -> jsonService.toObject(line, Invoice.class))
+          .collect(Collectors.toList());
+    } catch (IOException exception) {
+      throw new RuntimeException("Failed to get all ids", exception);
+    }
+  }
+
   private boolean containsId(String line, long id) {
     return line.contains("\"id\":" + id + ",");
   }

@@ -20,8 +20,8 @@ class JsonServiceTest extends Specification {
 
         then:
         invoice.getId() == invoiceFromJson.getId()
-        invoice.getBuyer().getName() == invoiceFromJson.getBuyer().getName()
-        invoice.getSeller().getAddress() == invoiceFromJson.getSeller().getAddress()
+        invoice.getBuyer().getAddress() == invoiceFromJson.getBuyer().getAddress()
+        invoice.getSeller().getName() == invoiceFromJson.getSeller().getName()
         invoice.getDate() == invoiceFromJson.getDate()
     }
 
