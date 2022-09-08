@@ -8,20 +8,20 @@ import org.springframework.context.annotation.Configuration;
 import pl.futurecollars.invoicing.db.Database;
 
 @Configuration
-public class FileRepositoryConfiguration {
+class FileRepositoryConfiguration {
 
-  public static final String DATABASE_LOCATION = "db";
-  public static final String INVOICES_FILE_NAME = "invoices.json";
-  public static final String ID_FILE_NAME = "id.txt";
+  private static final String DATABASE_LOCATION = "db";
+  private static final String INVOICES_FILE_NAME = "invoices.json";
+  private static final String ID_FILE_NAME = "id.txt";
 
   @Bean
-  public IdService idService(FilesService filesService) throws IOException {
+  IdService idService(FilesService filesService) throws IOException {
     Path idFilePath = Files.createTempFile(DATABASE_LOCATION, ID_FILE_NAME);
     return new IdService(idFilePath, filesService);
   }
 
   @Bean
-  public Database inFileRepository(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
+  Database inFileRepository(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
     Path inFileRepositoryPath = Files.createTempFile(DATABASE_LOCATION, INVOICES_FILE_NAME);
     return new FileRepository(inFileRepositoryPath, idService, filesService, jsonService);
   }
