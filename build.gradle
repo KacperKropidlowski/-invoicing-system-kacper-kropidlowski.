@@ -74,14 +74,14 @@ jacocoTestCoverageVerification {
         }
     }
     afterEvaluate {
-            getClassDirectories().setFrom(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
-                        "pl/futurecollars/invoicing/db/file/Config*",
-                        "pl/futurecollars/invoicing/controller/*",
-                        "pl/futurecollars/invoicing/App*"
-                ])
-            })
-        }
+        getClassDirectories().setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "pl/futurecollars/invoicing/db/file/Config*",
+                    "pl/futurecollars/invoicing/controller/*",
+                    "pl/futurecollars/invoicing/App*"
+            ])
+        })
+    }
 }
 test {
     finalizedBy jacocoTestReport

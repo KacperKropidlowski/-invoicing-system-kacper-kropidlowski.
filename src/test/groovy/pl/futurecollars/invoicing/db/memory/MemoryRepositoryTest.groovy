@@ -24,7 +24,7 @@ class MemoryRepositoryTest extends Specification {
         when:
         database.save(invoice)
         def result = database.getById(1)
-        
+
         then:
         result.isPresent()
         result == Optional.of(invoice)
@@ -51,7 +51,7 @@ class MemoryRepositoryTest extends Specification {
         when:
         database.save(invoice)
         database.delete(1L)
-        
+
         then:
         database.getById(1) == Optional.empty()
     }
