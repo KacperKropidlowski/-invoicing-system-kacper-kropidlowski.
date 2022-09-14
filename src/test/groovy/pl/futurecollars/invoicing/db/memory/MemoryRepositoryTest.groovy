@@ -7,12 +7,12 @@ import static pl.futurecollars.invoicing.DataForTesting.invoice
 import static pl.futurecollars.invoicing.DataForTesting.updatedInvoice
 
 
-class InMemoryDatabaseTest extends Specification {
+class MemoryRepositoryTest extends Specification {
 
     Database database
 
     def setup() {
-        database = new InMemoryDatabase()
+        database = new MemoryRepository()
     }
 
     def "should save an invoice and return id"() {
@@ -24,7 +24,7 @@ class InMemoryDatabaseTest extends Specification {
         when:
         database.save(invoice)
         def result = database.getById(1)
-        
+
         then:
         result.isPresent()
         result == Optional.of(invoice)
@@ -51,7 +51,7 @@ class InMemoryDatabaseTest extends Specification {
         when:
         database.save(invoice)
         database.delete(1L)
-        
+
         then:
         database.getById(1) == Optional.empty()
     }

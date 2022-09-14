@@ -5,8 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
-public class FilesService {
+@Service
+class FilesService {
 
   void appendLineToFile(Path path, String line) throws IOException {
     Files.write(path, (line + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);

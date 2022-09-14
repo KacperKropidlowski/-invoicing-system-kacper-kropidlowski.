@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Iterator;
 
-public class IdService {
+class IdService {
 
   private final Path idFilePath;
   private final FilesService filesService;
   private long nextId = 1;
 
-  public IdService(Path idFilePath, FilesService filesService) {
+  IdService(Path idFilePath, FilesService filesService) {
     this.idFilePath = idFilePath;
     this.filesService = filesService;
 

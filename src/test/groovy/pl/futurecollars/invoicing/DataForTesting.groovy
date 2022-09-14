@@ -15,8 +15,8 @@ class DataForTesting {
 
     static InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", new BigDecimal(700), new BigDecimal(161), Vat.VAT_23)
 
-    static Invoice invoice = new Invoice(LocalDate.of(2022, Month.JUNE,29),seller,buyer,List.of(firstEntry))
+    static Invoice invoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER,15),seller,buyer,List.of(firstEntry))
 
-    static Invoice updatedInvoice = new Invoice(LocalDate.of(2022, Month.JUNE,29),buyer,seller,List.of(firstEntry))
+    static Invoice updatedInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER,15),buyer,seller,List.of(firstEntry))
 
 }
