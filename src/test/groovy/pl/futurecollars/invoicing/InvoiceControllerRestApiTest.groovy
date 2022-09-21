@@ -63,17 +63,18 @@ class InvoiceControllerRestApiTest extends Specification {
     }
 
     def "should update invoice from database and return status 200"() {
-        expect:
-        if (mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())) {
-            mockMvc.perform(MockMvcRequestBuilders.put("/invoices/1").content(getUpdatedInvoiceAsString()).contentType(MediaType.APPLICATION_JSON))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-            mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andReturn().response.contentAsString == getUpdatedInvoiceAsString().replace('"id":0', '"id":1')
-        }
+        given:
+        mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+        when:
+        mockMvc.perform(MockMvcRequestBuilders.put("/invoices/1").content(getUpdatedInvoiceAsString()).contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+        then:
+        mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().response.contentAsString == getUpdatedInvoiceAsString().replace('"id":0', '"id":1')
     }
 
     def "should get all invoices from database and return status 200"() {
@@ -87,16 +88,17 @@ class InvoiceControllerRestApiTest extends Specification {
     }
 
     def "should delete invoice from database and return status 200"() {
-        expect:
-        if (mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())) {
-            mockMvc.perform(MockMvcRequestBuilders.delete("/invoices/1"))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-            mockMvc.perform(MockMvcRequestBuilders.delete("/invoices/1"))
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(MockMvcResultMatchers.status().isNotFound())
-        }
+        given:
+        mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+        when:
+        mockMvc.perform(MockMvcRequestBuilders.delete("/invoices/1"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+        then:
+        mockMvc.perform(MockMvcRequestBuilders.delete("/invoices/1"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
     }
 
     def getInvoiceAsString() {
@@ -110,4 +112,5 @@ class InvoiceControllerRestApiTest extends Specification {
     def getAllInvoicesAsString() {
         return "[" + (getUpdatedInvoiceAsString().replace('"id":0', '"id":1') + "," + getInvoiceAsString().replace('"id":0', '"id":2')) + "]"
     }
+
 }
