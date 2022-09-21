@@ -21,7 +21,7 @@ class FileRepositoryConfiguration {
   }
 
   @Bean
-  Database inFileRepository(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
+  Database fileRepository(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
     Path inFileRepositoryPath = Files.createTempFile(DATABASE_LOCATION, INVOICES_FILE_NAME);
     return new FileRepository(inFileRepositoryPath, idService, filesService, jsonService);
   }
