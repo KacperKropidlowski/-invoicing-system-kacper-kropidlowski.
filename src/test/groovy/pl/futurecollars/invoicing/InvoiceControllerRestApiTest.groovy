@@ -100,6 +100,10 @@ class InvoiceControllerRestApiTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
     }
+    def setup() {
+        DataForTesting.invoice.setId(0L)
+        DataForTesting.updatedInvoice.setId(0L)
+    }
 
     def getInvoiceAsString() {
         return jsonService.convertToJson(DataForTesting.invoice)

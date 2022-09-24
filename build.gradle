@@ -1,17 +1,31 @@
-plugins {
+buildscript {
+    ext {
+        lombokVersion = '1.18.24'
+        springBootVersion = '2.7.3'
+        springDependencyManagmentVersion = '1.0.14.RELEASE'
+        spockVersion = '2.2-groovy-4.0'
+    }
+}
 
-    id 'groovy'
+plugins {
     id 'application'
     id 'checkstyle'
+    id 'groovy'
+    id 'io.spring.dependency-management' version "${springDependencyManagmentVersion}"
     id 'jacoco'
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(14)
+        vendor = JvmVendorSpec.ADOPTOPENJDK
+    }
 }
 
 group = 'pl.futurecollars'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 configurations {
     compileOnly {
@@ -24,26 +38,19 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
 
-    testImplementation 'org.codehaus.groovy:groovy:3.0.12'
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
-    testImplementation 'org.spockframework:spock-spring:2.2-groovy-2.5'
-    testImplementation 'junit:junit:4.13.2'
-
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    testCompileOnly 'org.projectlombok:lombok:1.18.24'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
-
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "org.spockframework:spock-spring:${spockVersion}"
 }
 
 application {
@@ -57,6 +64,11 @@ checkstyle {
     ignoreFailures = false
     maxWarnings = 0
     maxErrors = 0
+}
+
+test {
+    finalizedBy jacocoTestCoverageVerification
+    finalizedBy jacocoTestReport
 }
 
 jacocoTestCoverageVerification {
@@ -82,10 +94,7 @@ jacocoTestCoverageVerification {
         })
     }
 }
-test {
-    finalizedBy jacocoTestReport
-    finalizedBy jacocoTestCoverageVerification
-}
+
 jacocoTestReport {
     dependsOn test
     afterEvaluate {
