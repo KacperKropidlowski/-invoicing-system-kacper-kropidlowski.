@@ -12,10 +12,10 @@ import pl.futurecollars.invoicing.db.Database;
 
 @Slf4j
 @Configuration
+@ConditionalOnProperty(value = "database", havingValue = "file")
 class FileRepositoryConfiguration {
 
   @Bean
-  @ConditionalOnProperty(value = "database", havingValue = "file")
   IdService idService(FilesService filesService,
                       @Value("${database.path}") String databasePath,
                       @Value("${database.id.file}") String idFile
@@ -25,7 +25,6 @@ class FileRepositoryConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(value = "database", havingValue = "file")
   Database fileRepository(IdService idService,
                           FilesService filesService,
                           JsonService jsonService,
