@@ -4,8 +4,8 @@ import pl.futurecollars.invoicing.db.Database
 import pl.futurecollars.invoicing.db.memory.MemoryRepository
 import spock.lang.Specification
 
-import static pl.futurecollars.invoicing.DataForTesting.invoice
-import static pl.futurecollars.invoicing.DataForTesting.updatedInvoice
+import static pl.futurecollars.invoicing.DataForTesting.firstInvoice
+import static pl.futurecollars.invoicing.DataForTesting.secondInvoice
 
 class InvoiceServiceIntegrationTest extends Specification {
 
@@ -18,40 +18,40 @@ class InvoiceServiceIntegrationTest extends Specification {
 
     def "should save invoice returning id, invoice id is set to correct value"() {
         when:
-        long invoiceId = invoiceService.saveInvoice(invoice)
+        long invoiceId = invoiceService.saveInvoice(firstInvoice)
 
         then:
         invoiceId == 1
-        invoiceService.getInvoice(1) == Optional.of(invoice)
+        invoiceService.getInvoice(1) == Optional.of(firstInvoice)
     }
 
     def "it's possible to get invoice by id"() {
         given:
-        invoiceService.saveInvoice(invoice)
+        invoiceService.saveInvoice(firstInvoice)
 
         when:
         def result = invoiceService.getInvoice(1L)
 
         then:
-        result == Optional.of(invoice)
+        result == Optional.of(firstInvoice)
     }
 
     def "it's possible to update the invoice"() {
         given:
-        invoiceService.saveInvoice(invoice)
+        invoiceService.saveInvoice(firstInvoice)
 
         when:
-        invoiceService.updateInvoice(1, updatedInvoice)
+        invoiceService.updateInvoice(1, secondInvoice)
         def result = invoiceService.getInvoice(1)
 
         then:
         result.isPresent()
-        result.get() == updatedInvoice
+        result.get() == secondInvoice
     }
 
     def "it's possible to delete the invoice"() {
         given:
-        invoiceService.saveInvoice(invoice)
+        invoiceService.saveInvoice(firstInvoice)
 
         when:
         invoiceService.deleteInvoice(1)
@@ -62,11 +62,11 @@ class InvoiceServiceIntegrationTest extends Specification {
 
     def "it's possible to get all saved invoices"() {
         given:
-        invoiceService.saveInvoice(invoice)
-        invoiceService.saveInvoice(updatedInvoice)
+        invoiceService.saveInvoice(firstInvoice)
+        invoiceService.saveInvoice(secondInvoice)
 
         expect:
-        invoiceService.getAllInvoices().contains(invoice)
-        invoiceService.getAllInvoices().contains(updatedInvoice)
+        invoiceService.getAllInvoices().contains(firstInvoice)
+        invoiceService.getAllInvoices().contains(secondInvoice)
     }
 }

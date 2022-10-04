@@ -1,5 +1,6 @@
 package pl.futurecollars.invoicing.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -9,27 +10,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import pl.futurecollars.invoicing.model.Invoice;
 
+@Api(tags = {"invoice-controller"})
+@RequestMapping("invoices")
 public interface InvoiceApi {
 
   @ApiOperation(value = "Get invoice with given id")
-  @GetMapping("/invoices/{id}")
+  @GetMapping("/{id}")
   ResponseEntity<Invoice> getInvoice(@PathVariable long id);
 
   @ApiOperation(value = "Add new invoice to system")
-  @PostMapping("/invoices")
+  @PostMapping
   long saveInvoice(@RequestBody Invoice invoice);
 
   @ApiOperation(value = "Delete invoice with given id")
-  @DeleteMapping("/invoices/{id}")
+  @DeleteMapping("/{id}")
   ResponseEntity<?> deleteInvoice(@PathVariable long id);
 
   @ApiOperation(value = "Update invoice with given id")
-  @PutMapping("/invoices/{id}")
+  @PutMapping("/{id}")
   ResponseEntity<?> updateInvoice(@RequestBody Invoice invoice, @PathVariable long id);
 
   @ApiOperation(value = "Get list of all invoices")
-  @GetMapping("/invoices/all")
+  @GetMapping("/all")
   List<Invoice> getAllInvoices();
 }
