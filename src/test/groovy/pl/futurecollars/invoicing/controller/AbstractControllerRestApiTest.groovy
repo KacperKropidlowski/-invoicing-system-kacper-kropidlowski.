@@ -12,9 +12,6 @@ import pl.futurecollars.invoicing.model.Invoice
 import pl.futurecollars.invoicing.service.TaxCalculatorResult
 import spock.lang.Specification
 
-import java.nio.file.Files
-import java.nio.file.Path
-
 @AutoConfigureMockMvc
 class AbstractControllerRestApiTest extends Specification {
 
@@ -100,10 +97,5 @@ class AbstractControllerRestApiTest extends Specification {
 
     def getInvoiceAsObject(String json) {
         return jsonService.convertToObject(json, Invoice)
-    }
-
-    def cleanupSpec() {
-        Path idFilePath = Files.createTempFile("db", "testingId.txt")
-        Files.write(idFilePath,[])
     }
 }
