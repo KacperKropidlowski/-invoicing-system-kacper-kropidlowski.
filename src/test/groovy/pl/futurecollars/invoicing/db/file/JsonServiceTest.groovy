@@ -10,13 +10,13 @@ class JsonServiceTest extends Specification {
     def "can convert object to json and read it back"() {
         given:
         def jsonService = new JsonService()
-        def invoice = DataForTesting.invoice
+        def invoice = DataForTesting.firstInvoice
 
         when:
         def invoiceAsString = jsonService.convertToJson(invoice)
 
         and:
-        def invoiceFromJson = jsonService.toObject(invoiceAsString, Invoice)
+        def invoiceFromJson = jsonService.convertToObject(invoiceAsString, Invoice)
 
         then:
         invoice.getId() == invoiceFromJson.getId()

@@ -25,7 +25,7 @@ class JsonService {
     }
   }
 
-  <T> T toObject(String json, Class<T> clazz) {
+  <T> T convertToObject(String json, Class<T> clazz) {
     try {
       return objectMapper.readValue(json, clazz);
     } catch (JsonProcessingException exception) {

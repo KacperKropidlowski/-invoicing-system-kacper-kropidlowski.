@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
         .build()
         .apiInfo(
             new ApiInfoBuilder()
-                .description("Invoice managment application.")
+                .description("Invoice management application.")
                 .license("No license available - private!")
                 .title("Private Invoicing")
                 .contact(
@@ -35,7 +35,8 @@ public class SwaggerConfiguration {
                 .build()
         )
         .tags(
-            new Tag("invoice-controller", "Controller used to list / add / update / delete invoices.")
+            new Tag("invoice-controller", "Controller used to list / add / update / delete invoices."),
+            new Tag("tax-calculator-controller", "Controller used to calculate taxes.")
         );
   }
 }

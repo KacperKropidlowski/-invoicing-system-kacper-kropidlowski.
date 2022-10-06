@@ -35,7 +35,7 @@ public class FileRepository implements Database {
       return filesService.readAllLines(databasePath)
           .stream()
           .filter(line -> containsId(line, id))
-          .map(line -> jsonService.toObject(line, Invoice.class))
+          .map(line -> jsonService.convertToObject(line, Invoice.class))
           .findFirst();
     } catch (IOException exception) {
       throw new RuntimeException("Failed to get invoice with id: " + id, exception);
@@ -52,7 +52,7 @@ public class FileRepository implements Database {
           .orElseThrow(() -> new IllegalArgumentException("Id " + id + " does not exist"));
 
       allInvoices.remove(toUpdate);
-      Invoice invoice = jsonService.toObject(toUpdate, Invoice.class);
+      Invoice invoice = jsonService.convertToObject(toUpdate, Invoice.class);
       invoice.setDate(newInvoice.getDate());
       invoice.setSeller(newInvoice.getSeller());
       invoice.setBuyer(newInvoice.getBuyer());
@@ -86,7 +86,7 @@ public class FileRepository implements Database {
     try {
       return filesService.readAllLines(databasePath)
           .stream()
-          .map(line -> jsonService.toObject(line, Invoice.class))
+          .map(line -> jsonService.convertToObject(line, Invoice.class))
           .collect(Collectors.toList());
     } catch (IOException exception) {
       throw new RuntimeException("Failed to get all ids", exception);

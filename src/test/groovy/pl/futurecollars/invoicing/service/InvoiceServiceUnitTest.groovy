@@ -3,8 +3,8 @@ package pl.futurecollars.invoicing.service
 import pl.futurecollars.invoicing.db.Database
 import spock.lang.Specification
 
-import static pl.futurecollars.invoicing.DataForTesting.invoice
-import static pl.futurecollars.invoicing.DataForTesting.updatedInvoice
+import static pl.futurecollars.invoicing.DataForTesting.firstInvoice
+import static pl.futurecollars.invoicing.DataForTesting.secondInvoice
 
 
 class InvoiceServiceUnitTest extends Specification {
@@ -19,10 +19,10 @@ class InvoiceServiceUnitTest extends Specification {
 
     def "calling saveInvoice() should delegate to database save() method"() {
         when:
-        invoiceService.saveInvoice(invoice)
+        invoiceService.saveInvoice(firstInvoice)
 
         then:
-        1 * database.save(invoice)
+        1 * database.save(firstInvoice)
     }
 
     def "calling getInvoice() should delegate to database getById() method"() {
@@ -38,13 +38,13 @@ class InvoiceServiceUnitTest extends Specification {
 
     def "calling updateInvoice() should return true and delegate to database update() method if invoice to update exists in database"() {
         given:
-        database.getById(1) >> Optional.of(invoice)
+        database.getById(1) >> Optional.of(firstInvoice)
 
         when:
-        invoiceService.updateInvoice(1, updatedInvoice)
+        invoiceService.updateInvoice(1, secondInvoice)
 
         then:
-        1 * database.update(1, updatedInvoice)
+        1 * database.update(1, secondInvoice)
         true
     }
 
@@ -53,7 +53,7 @@ class InvoiceServiceUnitTest extends Specification {
         database.getById(1) >> Optional.empty()
 
         when:
-        def result = invoiceService.updateInvoice(1, updatedInvoice)
+        def result = invoiceService.updateInvoice(1, secondInvoice)
 
         then:
         !result
@@ -61,7 +61,7 @@ class InvoiceServiceUnitTest extends Specification {
 
     def "calling deleteInvoice() should delegate to database delete() method if invoice exists in database"() {
         given:
-        database.getById(1) >> Optional.of(invoice)
+        database.getById(1) >> Optional.of(firstInvoice)
 
         when:
         invoiceService.deleteInvoice(1)
