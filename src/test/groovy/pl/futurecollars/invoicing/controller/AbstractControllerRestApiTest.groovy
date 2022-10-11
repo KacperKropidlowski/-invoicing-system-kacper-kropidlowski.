@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import pl.futurecollars.invoicing.db.file.JsonService
+import pl.futurecollars.invoicing.model.Company
 import pl.futurecollars.invoicing.model.Invoice
 import pl.futurecollars.invoicing.service.TaxCalculatorResult
 import spock.lang.Specification
@@ -41,11 +42,11 @@ class AbstractControllerRestApiTest extends Specification {
     }
 
     List<Invoice> getAllInvoices() {
-         def response = mockMvc.perform(MockMvcRequestBuilders.get("$INVOICES_ENDPOINT" + "all"))
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("$INVOICES_ENDPOINT" + "all"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().response.contentAsString
-        return jsonService.convertToObject(response,Invoice[])
+        return jsonService.convertToObject(response, Invoice[])
     }
 
     void deleteInvoice(long id) {
@@ -60,8 +61,8 @@ class AbstractControllerRestApiTest extends Specification {
                 .andExpect(MockMvcResultMatchers.status().isOk())
     }
 
-    TaxCalculatorResult getTaxCalculatorResult(String taxIdentificationNumber) {
-        def taxCalculatorResponse = mockMvc.perform(MockMvcRequestBuilders.get("$TAX_ENDPOINT$taxIdentificationNumber"))
+    TaxCalculatorResult getTaxCalculatorResult(Company company) {
+        def taxCalculatorResponse = mockMvc.perform(MockMvcRequestBuilders.post("$TAX_ENDPOINT").content(jsonService.convertToJson(company)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().response.contentAsString
@@ -74,21 +75,6 @@ class AbstractControllerRestApiTest extends Specification {
         first.getSeller().toString() == second.getSeller().toString()
         first.getBuyer().toString() == second.getBuyer().toString()
         first.getInvoiceEntries().toString() == second.getInvoiceEntries().toString()
-    }
-
-    boolean compareTaxCalculatorResults(TaxCalculatorResult taxCalculatorResult,
-                                        BigDecimal income,
-                                        BigDecimal costs,
-                                        BigDecimal earnings,
-                                        BigDecimal incomingVat,
-                                        BigDecimal outgoingVat,
-                                        BigDecimal vatToReturn) {
-        taxCalculatorResult.income == income
-        taxCalculatorResult.costs == costs
-        taxCalculatorResult.earnings == earnings
-        taxCalculatorResult.incomingVat == incomingVat
-        taxCalculatorResult.outgoingVat == outgoingVat
-        taxCalculatorResult.vatToReturn == vatToReturn
     }
 
     def getInvoiceAsJson(Invoice invoice) {
