@@ -1,5 +1,7 @@
 package pl.futurecollars.invoicing
 
+import pl.futurecollars.invoicing.model.Car
+
 import java.time.LocalDate
 import pl.futurecollars.invoicing.model.Company
 import pl.futurecollars.invoicing.model.Invoice
@@ -10,15 +12,18 @@ import java.time.Month
 
 class DataForTesting {
 
-    static Company relaxKebab = new Company("Relax Kebab", "5212205778", "aleja Jana Pawla II 40A, 05-250 Radzymin")
-    static Company agencjaMieniaWojskowego = new Company("AGENCJA MIENIA WOJSKOWEGO", "5261038122", "ul. Nowowiejska 26A, 00-911 Warszawa")
+    static Company firstCompany = new Company("First Company", "5212205778", "First Street 1, New York, USA", BigDecimal.valueOf(1000).setScale(2), BigDecimal.valueOf(1000).setScale(2))
+    static Company secondCompany = new Company("Second Company", "5261038122", "Second Street 2, California, USA", BigDecimal.valueOf(5000).setScale(2), BigDecimal.valueOf(5000).setScale(2))
 
-    static InvoiceEntry firstEntry = new InvoiceEntry("Stumetrowy kebab", BigDecimal.valueOf(700), BigDecimal.ONE, BigDecimal.valueOf(56), Vat.VAT_8)
-    static InvoiceEntry secondEntry = new InvoiceEntry("Karabinek GROT S 16 FB-M1", BigDecimal.valueOf(7000), BigDecimal.ONE, BigDecimal.valueOf(1610), Vat.VAT_23)
-    static InvoiceEntry thirdEntry = new InvoiceEntry("Zestaw zastawy sto³owej z kuchni marynarki wojennej", BigDecimal.valueOf(50), BigDecimal.valueOf(50), BigDecimal.valueOf(575), Vat.VAT_23)
+    static Car firstCar = new Car("DW11111",true)
+    static Car secondCar = new Car("DW22222",false)
 
-    static Invoice firstInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15), relaxKebab, agencjaMieniaWojskowego, List.of(firstEntry))
-    static Invoice secondInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15), agencjaMieniaWojskowego, relaxKebab, List.of(secondEntry))
-    static Invoice thirdInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15),agencjaMieniaWojskowego,relaxKebab,List.of(secondEntry,thirdEntry))
+    static InvoiceEntry firstEntry = new InvoiceEntry("Service #1", BigDecimal.valueOf(1000).setScale(2), BigDecimal.ONE.setScale(2), BigDecimal.valueOf(80).setScale(2), Vat.VAT_8, firstCar)
+    static InvoiceEntry secondEntry = new InvoiceEntry("Product #1", BigDecimal.valueOf(7000).setScale(2), BigDecimal.ONE.setScale(2), BigDecimal.valueOf(1610).setScale(2), Vat.VAT_23, secondCar)
+    static InvoiceEntry thirdEntry = new InvoiceEntry("Product #2", BigDecimal.valueOf(50).setScale(2), BigDecimal.valueOf(50).setScale(2), BigDecimal.valueOf(575).setScale(2), Vat.VAT_23, secondCar)
+
+    static Invoice firstInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15), firstCompany, secondCompany, List.of(firstEntry))
+    static Invoice secondInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15), secondCompany, firstCompany, List.of(secondEntry))
+    static Invoice thirdInvoice = new Invoice(LocalDate.of(2022, Month.SEPTEMBER, 15),secondCompany,firstCompany,List.of(secondEntry,thirdEntry))
 
 }

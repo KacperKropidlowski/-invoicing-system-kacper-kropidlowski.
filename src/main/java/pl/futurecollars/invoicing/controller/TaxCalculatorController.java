@@ -1,8 +1,8 @@
 package pl.futurecollars.invoicing.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.futurecollars.invoicing.model.Company;
 import pl.futurecollars.invoicing.service.TaxCalculatorResult;
 import pl.futurecollars.invoicing.service.TaxCalculatorService;
 
@@ -17,7 +17,7 @@ public class TaxCalculatorController implements TaxCalculatorApi {
   }
 
   @Override
-  public TaxCalculatorResult calculateTaxes(@PathVariable String taxIdentificationNumber) {
-    return taxCalculatorService.calculateTaxes(taxIdentificationNumber);
+  public TaxCalculatorResult calculateTaxes(Company company) {
+    return taxCalculatorService.getTaxCalculatorResult(company);
   }
 }

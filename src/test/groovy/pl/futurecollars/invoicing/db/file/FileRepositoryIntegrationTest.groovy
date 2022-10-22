@@ -9,6 +9,10 @@ import java.nio.file.Files
 import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 
+import static pl.futurecollars.invoicing.DataForTesting.firstInvoice
+import static pl.futurecollars.invoicing.DataForTesting.secondInvoice
+
+
 class FileRepositoryIntegrationTest extends Specification {
 
     Path idServiceTestingPath = Path.of("src/test/resources/db/file/testingId.txt")
@@ -18,17 +22,15 @@ class FileRepositoryIntegrationTest extends Specification {
     IdService idService = new IdService(idServiceTestingPath, filesService)
     Database inFileDatabase = new FileRepository(inFileDatabaseTestingPath, idService, filesService, jsonService)
     Database wrongPathDatabase = new FileRepository(Path.of("wrongPath"), idService, filesService, jsonService)
-    Invoice invoice = DataForTesting.firstInvoice
-    Invoice updatedInvoice = DataForTesting.secondInvoice
 
-    def cleanup() {
+    def setup() {
         Files.write(inFileDatabaseTestingPath, [])
         Files.write(idServiceTestingPath, [])
     }
 
     def "should save invoice"() {
         when:
-        def result = inFileDatabase.save(invoice)
+        def result = inFileDatabase.save(firstInvoice)
 
         then:
         result == 1
@@ -36,7 +38,7 @@ class FileRepositoryIntegrationTest extends Specification {
 
     def "should throw exception with message 'Failed to save invoice'"() {
         when:
-        wrongPathDatabase.save(invoice)
+        wrongPathDatabase.save(firstInvoice)
 
         then:
         def exception = thrown(RuntimeException)
@@ -47,12 +49,13 @@ class FileRepositoryIntegrationTest extends Specification {
 
     def "should get invoice by id"() {
         when:
-        inFileDatabase.save(invoice)
-        def result = inFileDatabase.getById(1)
+        def id = inFileDatabase.save(firstInvoice)
+        def result = inFileDatabase.getById(id)
 
         then:
         result.isPresent()
-        result.toString().contains("Invoice(id=1, date=2022-09-15, seller=Company(name=Relax Kebab, taxIdentificationNumber=5212205778, address=aleja Jana Pawla II 40A, 05-250 Radzymin), buyer=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa), invoiceEntries=[InvoiceEntry(description=Stumetrowy kebab, price=700, quantity=1, vatValue=56, vatRate=Vat.VAT_8")
+        firstInvoice.setId(id)
+        result.get().toString() == firstInvoice.toString()
     }
 
     def "should throw exception with message 'Failed to get invoice with id: 1"() {
@@ -68,30 +71,30 @@ class FileRepositoryIntegrationTest extends Specification {
 
     def "should update invoice"() {
         given:
-        inFileDatabase.save(invoice)
+        def id = inFileDatabase.save(firstInvoice)
 
         when:
-        inFileDatabase.update(1, updatedInvoice)
-        def result = inFileDatabase.getById(1)
+        inFileDatabase.update(id, secondInvoice)
+        def result = inFileDatabase.getById(id)
 
         then:
         result.isPresent()
-        result.toString().contains("id=1")
-        result.toString().contains("seller=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa)")
+        secondInvoice.setId(id)
+        result.get().toString() == secondInvoice.toString()
     }
 
-    def "should throw exception with message 'Id 34 does not exist'"() {
+    def "should throw exception with message 'Id 734 does not exist'"() {
         when:
-        inFileDatabase.update(34, updatedInvoice)
+        inFileDatabase.update(734, secondInvoice)
 
         then:
         def exception = thrown(RuntimeException)
-        exception.message == "Id 34 does not exist"
+        exception.message == "Id 734 does not exist"
     }
 
     def "should throw exception with message 'Failed to update invoice with id: 1'"() {
         when:
-        wrongPathDatabase.update(1, updatedInvoice)
+        wrongPathDatabase.update(1, secondInvoice)
 
         then:
         def exception = thrown(RuntimeException)
@@ -100,8 +103,8 @@ class FileRepositoryIntegrationTest extends Specification {
 
     def "should delete invoice"() {
         given:
-        inFileDatabase.save(invoice)
-        inFileDatabase.save(updatedInvoice)
+        inFileDatabase.save(firstInvoice)
+        inFileDatabase.save(secondInvoice)
 
         when:
         inFileDatabase.delete(2)
@@ -121,10 +124,13 @@ class FileRepositoryIntegrationTest extends Specification {
 
     def "should get all invoices"() {
         when:
-        inFileDatabase.save(invoice)
-        inFileDatabase.save(updatedInvoice)
+        def id1 = inFileDatabase.save(firstInvoice)
+        def id2 = inFileDatabase.save(secondInvoice)
         then:
-        (inFileDatabase.getAllInvoices()).toString().contains("Invoice(id=1, date=2022-09-15, seller=Company(name=Relax Kebab, taxIdentificationNumber=5212205778, address=aleja Jana Pawla II 40A, 05-250 Radzymin), buyer=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa), invoiceEntries=[InvoiceEntry(description=Stumetrowy kebab, price=700, quantity=1, vatValue=56, vatRate=Vat.VAT_8)]), Invoice(id=2, date=2022-09-15, seller=Company(name=AGENCJA MIENIA WOJSKOWEGO, taxIdentificationNumber=5261038122, address=ul. Nowowiejska 26A, 00-911 Warszawa), buyer=Company(name=Relax Kebab, taxIdentificationNumber=5212205778, address=aleja Jana Pawla II 40A, 05-250 Radzymin), invoiceEntries=[InvoiceEntry(description=Karabinek GROT S 16 FB-M1, price=7000, quantity=1, vatValue=1610, vatRate=Vat.VAT_23")
+        firstInvoice.setId(id1)
+        secondInvoice.setId(id2)
+        def invoices = [firstInvoice, secondInvoice]
+        inFileDatabase.getAllInvoices().toString() == invoices.toString()
     }
 
     def "should throw an exception with message 'Failed to get all ids'"() {
